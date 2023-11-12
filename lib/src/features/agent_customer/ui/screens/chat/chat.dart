@@ -14,7 +14,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      body: (context) => const Center(child: Text("Home Page UI... UI will be updated in next build"),),
+      body: (context) => const Center(child: Icon(Icons.message_outlined, size: 70.0,)),
     );
   }
 }

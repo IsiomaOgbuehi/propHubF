@@ -44,6 +44,14 @@ abstract class AppTextStyles {
     height: 1.778,
     letterSpacing: -0.02,
   );
+
+  static TextStyle body1SemiBold = TextStyle(
+    fontSize: 15.0.asp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.neutral07,
+    height: 1.4,
+    letterSpacing: -0.01,
+  );
 }
 
 extension ScaledText on num {
