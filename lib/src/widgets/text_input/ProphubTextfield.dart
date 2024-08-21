@@ -147,7 +147,7 @@ class _PropHubTextFieldState extends State<PropHubTextField> {
                                 textAlignVertical: widget.alignVertical ?? TextAlignVertical.center,
                                 focusNode: focusNode,
                                 controller: widget.controller,
-                                cursorColor: widget.cursorColor ?? defaultBlack,
+                                cursorColor: widget.cursorColor,
                                 obscureText: widget.obscureText,
                                 obscuringCharacter: widget.obscuringCharacter,
                                 onEditingComplete: widget.onEditingComplete,
