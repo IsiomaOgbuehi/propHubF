@@ -34,6 +34,7 @@ class PropHubTextField extends StatefulWidget {
   final Widget? prefix;
   final bool obscureText;
   final String obscuringCharacter;
+  final Color cursorColor;
 
   const PropHubTextField({
     Key? key,
@@ -66,7 +67,8 @@ class PropHubTextField extends StatefulWidget {
     this.prefix,
     this.obscureText = false,
     this.obscuringCharacter = '•',
-    this.color
+    this.color,
+    this.cursorColor = Colors.white
   }): super(key: key);
 
   @override
@@ -145,14 +147,14 @@ class _PropHubTextFieldState extends State<PropHubTextField> {
                                 textAlignVertical: widget.alignVertical ?? TextAlignVertical.center,
                                 focusNode: focusNode,
                                 controller: widget.controller,
-                                cursorColor: defaultBlack,
+                                cursorColor: widget.cursorColor ?? defaultBlack,
                                 obscureText: widget.obscureText,
                                 obscuringCharacter: widget.obscuringCharacter,
                                 onEditingComplete: widget.onEditingComplete,
                                 minLines: widget.minLines,
                                 maxLines: widget.maxLines,
                                 style: TextStyle(
-                                    fontSize: 15.0.sp,
+                                    fontSize: 14.0.sp,
                                     fontWeight: FontWeight.bold,
                                     color: value == null ? Colors.white : Colors.amber),
                                 validator: widget.validator,

@@ -1,11 +1,66 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:prophub/src/utilities/constants/app_constants.dart';
 import 'package:prophub/src/widgets/text_input/platform_input/cupertino_dropdown.dart';
 import 'package:prophub/src/widgets/text_input/platform_input/material_dropdown.dart';
 
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
+
+class FormCustomDropdownField extends FormField<String?> {
+  final List<String> items;
+  final ValueChanged<String>? onChanged;
+  final Color dropIconColor;
+  final Color? backgroundColor;
+  final String? hintText;
+  final DropdownFieldController? controller;
+  final bool withHint;
+  final bool readOnly;
+  final VoidCallback? onEditingComplete;
+
+  FormCustomDropdownField({
+    super.key,
+    required this.items,
+    this.onChanged,
+    this.dropIconColor = paleSkyGrey,
+    super.validator,
+    super.autovalidateMode,
+    super.initialValue,
+    this.backgroundColor,
+    this.hintText,
+    this.controller,
+    this.withHint = true,
+    this.readOnly = false,
+    this.onEditingComplete,
+  }) : super(
+    builder: (state) => Builder(
+      builder: (context) {
+        return CustomDropDownButton(
+          items: items,
+          dropdownValue: controller ?? DropdownFieldController(text: state.value),
+          onChanged: (value) {
+            if (readOnly) return;
+
+            if (value == null || value.isEmpty) return;
+            state.didChange(value);
+            onChanged?.call(value);
+
+            Future.delayed(
+              Constants.shortAnimationDuration,
+              onEditingComplete,
+            );
+          },
+          dropIconColor: dropIconColor,
+          backGroundColor: backgroundColor,
+          hintText: hintText,
+          withHint: withHint,
+          validationError: ValueNotifier(state.errorText),
+        );
+      },
+    ),
+  );
+}
 
 class CustomDropDownButton extends StatelessWidget {
   final ValueNotifier<String?> dropdownValue;
@@ -76,5 +131,15 @@ class CustomDropDownButton extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class DropdownFieldController extends ValueNotifier<String?> {
+  DropdownFieldController({String? text}) : super(text);
+
+  String get text => value ?? '';
+
+  set text(String newText) {
+    value = newText;
   }
 }

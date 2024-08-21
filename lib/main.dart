@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:prophub/src/features/agent_customer/ui/onboarding/steps/onboarding_steps.dart';
 import 'package:prophub/src/splash_screen.dart';
 
 void main() {

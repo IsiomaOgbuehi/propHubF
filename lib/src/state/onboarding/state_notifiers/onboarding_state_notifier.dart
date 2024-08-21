@@ -1,32 +1,21 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prophub/src/domain/core/value_objects.dart';
 import 'package:prophub/src/features/agent_customer/ui/screens/bottom_nav.dart';
-import 'package:prophub/src/utilities/utils.dart';
+import 'package:prophub/src/state/onboarding/view_models/view_state/registration_view_state.dart';
+import 'package:prophub/src/utilities/enums/agent_type.dart';
 import '../../app_models/lga_state_response.dart';
-import '../view_models/onboarding_view_model.dart';
 
-final onBoardingProvider = StateNotifierProvider.autoDispose<OnBoardingStateNotifier, OnBoardingViewModel>(
+final onBoardingProvider = StateNotifierProvider.autoDispose<OnBoardingStateNotifier, RegisterAgentViewState>(
     (ref) => OnBoardingStateNotifier(ref));
 
-class OnBoardingStateNotifier extends StateNotifier<OnBoardingViewModel> {
-  OnBoardingStateNotifier(this.ref)
-      : super(OnBoardingViewModel(
-            firstname: TextEditingController(),
-            personDetailsFormKey: GlobalKey<FormState>(),
-            addressFormKey: GlobalKey<FormState>(),
-            onBoardingPageController: PageController(initialPage: 0),
-            authDetailsFormKey: GlobalKey<FormState>(),
-            lastname: TextEditingController(),
-            middleName: TextEditingController(),
-            address: TextEditingController(),
-            phone: TextEditingController(),
-            email: TextEditingController(),
-            password: TextEditingController(),
-            confirmPassword: TextEditingController()));
+class OnBoardingStateNotifier extends StateNotifier<RegisterAgentViewState> {
+  OnBoardingStateNotifier(this.ref) : super(RegisterAgentViewState.initial());
 
   final StateNotifierProviderRef ref;
 
@@ -40,37 +29,98 @@ class OnBoardingStateNotifier extends StateNotifier<OnBoardingViewModel> {
     return jsonDecode(statesAndLocals);
   }
 
-  void stateValidatorTap() => state = state.copyWith(stateValidator: null);
-
-  void addressValidatorTap() => state = state.copyWith(addressValidator: null);
-
-  void stateValidation() {
-    if (state.selectedState.isBlank) {
-      state = state.copyWith(stateValidator: 'State cannot be empty');
-      return;
-    }
+  void firstNameOnChange(String input) {
+    state = state.copyWith(
+      personalDetailForm: state.personalDetailForm.copyWith(firstName: FirstName(input)),
+    );
   }
 
-  void setAgentType(String? value) {
-    state = state.copyWith(agentType: value);
+  void lastNameOnChange(String input) {
+    state = state.copyWith(
+      personalDetailForm: state.personalDetailForm.copyWith(lastName: LastName(input)),
+    );
   }
 
-  void stateSelectedAction(String? value) {
-    state = state.copyWith(lga: "");
-    if (value != null) {
-      state = state.copyWith(isStateSelected: true);
-    } else {
-      state = state.copyWith(isStateSelected: false);
-    }
-    state = state.copyWith(selectedState: value!);
-  }
-
-  void setLga(String value) {
-    state = state.copyWith(lga: value);
+  void middleNameOnChange(String input) {
+    state = state.copyWith(
+      personalDetailForm: state.personalDetailForm.copyWith(middleName: MiddleName(input)),
+    );
   }
 
   void setGender(String? value) {
-    state = state.copyWith(gender: value);
+    state = state.copyWith(personalDetailForm: state.personalDetailForm.copyWith(gender: Gender(value!)));
+  }
+
+  void setStreetAddress(String input) {
+    state = state.copyWith(addressForm: state.addressForm.copyWith(street: Street(input)));
+  }
+
+  void cacNumberOnchange(String input) {
+    state = state.copyWith(addressForm: state.addressForm.copyWith(cacNumber: CacNumber(input)));
+  }
+
+  void officeAddressOnchange(String input) {
+    state = state.copyWith(addressForm: state.addressForm.copyWith(officeAddress: OfficeAddress(input)));
+  }
+
+  void setProfessionalCertification(File input) {
+    state = state.copyWith(
+        addressForm: state.addressForm.copyWith(professionalCertification: ProfessionalCertification(input.path)));
+  }
+
+  void onStateChange(String input) {
+    state = state.copyWith(
+        addressForm: state.addressForm.copyWith(addressState: AddressState(input), addressLga: AddressLga('')),
+        isStateSelected: true);
+  }
+
+  void onLgaChange(String input) {
+    state = state.copyWith(
+      addressForm: state.addressForm.copyWith(addressLga: AddressLga(input)),
+    );
+  }
+
+  void setAgentType(String input) {
+    state = state.copyWith(
+        addressForm: state.addressForm.copyWith(agentRegistrationType: AgentRegistrationType(input.agentType)));
+  }
+
+  void emailOnChange(String input) {
+    state = state.copyWith(
+      authDetailsForm: state.authDetailsForm.copyWith(email: Email(input)),
+    );
+  }
+
+  void phoneOnChange(String input) {
+    state = state.copyWith(
+      authDetailsForm: state.authDetailsForm.copyWith(phoneNumber: PhoneNumber(input)),
+    );
+  }
+
+  void passwordOnChange(String input) {
+    state = state.copyWith(
+      authDetailsForm: state.authDetailsForm.copyWith(password: Password(input)),
+    );
+  }
+
+  void confirmPasswordOnChange(String input) {
+    state = state.copyWith(
+      authDetailsForm: state.authDetailsForm.copyWith(
+          confirmPassword:
+              ConfirmPassword(password: state.authDetailsForm.password.getOrCrash(), confirmPassword: input)),
+    );
+  }
+
+  bool disableAddressBtn() {
+    if (!{AgentType.legalDraftsman.value, AgentType.architect.value, AgentType.surveyor.value}
+            .contains(state.addressForm.agentRegistrationType.getOrCrash().value) &&
+        (state.addressForm.street.isValid &&
+            state.addressForm.addressState.isValid &&
+            state.addressForm.addressLga.isValid &&
+            state.addressForm.cacNumber.isValid)) {
+      return false;
+    }
+    return state.addressForm.failureOption.isSome();
   }
 
   void nextPage() {
@@ -80,8 +130,7 @@ class OnBoardingStateNotifier extends StateNotifier<OnBoardingViewModel> {
 
   void previousPage() {
     state = state.copyWith(pageNumber: state.pageNumber - 1);
-    state.onBoardingPageController
-        .previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+    state.onBoardingPageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
   void submitAction(BuildContext context) {

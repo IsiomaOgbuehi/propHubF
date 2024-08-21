@@ -52,6 +52,18 @@ abstract class AppTextStyles {
     height: 1.4,
     letterSpacing: -0.01,
   );
+
+  static TextStyle body2Regular = TextStyle(
+    fontSize: 14.0.asp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.neutral07,
+    height: 1.286,
+    letterSpacing: -0.015,
+  );
+
+  static TextStyle body2Medium = body2Regular.copyWith(
+    fontWeight: FontWeight.w500,
+  );
 }
 
 extension ScaledText on num {
