@@ -243,6 +243,7 @@ class PropHubBackgroundTextField extends StatefulWidget {
   final Color? background;
   final Color? borderColor;
   final String? hintText;
+  final double? inputRadius;
 
   const PropHubBackgroundTextField({
     Key? key,
@@ -278,7 +279,8 @@ class PropHubBackgroundTextField extends StatefulWidget {
     this.color = Colors.black,
     this.background = Colors.transparent,
     this.borderColor = Colors.black45,
-    this.hintText
+    this.hintText,
+    this.inputRadius
   }): super(key: key);
 
   @override
@@ -346,7 +348,7 @@ class _PropHubBackgroundTextFieldState extends State<PropHubBackgroundTextField>
                             width: width(context),
                             decoration: BoxDecoration(
                               color: widget.background ?? (value == null ? Theme.of(context).cardColor : chablisRed),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(widget.inputRadius ?? 12),
                               border: borderValue,
                             ),
                             padding: EdgeInsets.only(left: 16.0.w, right: 16.0.w),

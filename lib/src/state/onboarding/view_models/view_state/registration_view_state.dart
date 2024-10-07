@@ -6,7 +6,7 @@ import 'package:prophub/src/domain/entities/registration/personal_detail_entity.
 import 'package:prophub/src/exceptions/ground_exception.dart';
 import 'package:prophub/src/state/app_models/lga_state_response.dart';
 
-class RegisterAgentViewState extends PropHubViewModel {
+class RegisterAgentViewState extends PropHubViewUiState<RegisterAgentViewState> {
   @override
   final PropHubExceptions error;
   @override
@@ -42,6 +42,7 @@ class RegisterAgentViewState extends PropHubViewModel {
       authDetailsForm: AuthDetailsEntity.initial(),
       onBoardingPageController: PageController(initialPage: 0));
 
+  @override
   RegisterAgentViewState copyWith({
     PropHubExceptions? error,
     ViewState? viewState,

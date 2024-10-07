@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 abstract class AppColors {
   // app primary colors
   static const agentPrimary = Color(0xFF23003D);
-  static const primary = Color(0xFF00008B);
+  static const primary = Color(0xFF009bd6);
+  static const primaryDark = Color(0xFF00415a);
   static const primary01 = Color(0xFF581689);
   static const primary02 = Color(0xFF42D110);
   static const primary03 = Color(0xFFFE5139);

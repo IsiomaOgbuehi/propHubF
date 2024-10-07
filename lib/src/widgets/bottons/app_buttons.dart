@@ -93,13 +93,13 @@ class PropFlatButton extends StatelessWidget {
                           ],
                         ),
                       titleWidget ??
-                          Text(
+                          (value ? const CupertinoActivityIndicator() : Text(
                             title,
                             style: AppTextStyles.md.copyWith(
                               color: textColor ?? Colors.white,
                               fontWeight: isSmallButton ? FontWeight.w700 : FontWeight.w600,
                             ),
-                          ),
+                          )),
                       if (suffixIcon != null)
                         Row(
                           mainAxisSize: MainAxisSize.min,

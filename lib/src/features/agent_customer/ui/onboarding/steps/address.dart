@@ -57,7 +57,7 @@ class _AddressState extends ConsumerState<Address> with MPermissionHandler {
     final provider = ref.read(onBoardingProvider);
 
     _agentType.text = provider.addressForm.agentRegistrationType.isValid ? provider.addressForm.agentRegistrationType.getOrCrash().value : '';
-    _streetAddress.text = provider.addressForm.officeAddress!.isValid ? provider.addressForm.officeAddress!.getOrCrash() : '';
+    _streetAddress.text = provider.addressForm.street.isValid ? provider.addressForm.street.getOrCrash() : '';
     _stateAddress.text = provider.addressForm.addressState.isValid ? provider.addressForm.addressState.getOrCrash() : '';
     _lgaAddress.text = provider.addressForm.addressLga.isValid ? provider.addressForm.addressLga.getOrCrash() : '';
     _cacNumber.text = provider.addressForm.cacNumber.isValid ? provider.addressForm.cacNumber.getOrCrash() : '';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:prophub/src/features/agent_customer/ui/screens/home/home.dart';
 import 'package:prophub/src/features/agent_customer/ui/screens/profile/profile.dart';
 import 'package:prophub/src/features/agent_customer/ui/screens/search/search.dart';
@@ -38,26 +39,26 @@ class _BottomNavState extends ConsumerState<BottomNav> {
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
+            icon: Icon(Iconsax.home_1),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search_rounded),
+            icon: Icon(Iconsax.search_normal_1),
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_rounded),
+            icon: Icon(Iconsax.message_2),
             label: 'Chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Iconsax.profile_2user),
             label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.black87,
+        unselectedItemColor: AppColors.primaryDark,
         selectedItemColor: AppColors.primary,
-        unselectedLabelStyle: const TextStyle(color: Colors.black87),
+        unselectedLabelStyle: const TextStyle(color: AppColors.primaryDark),
         showUnselectedLabels: true,
         onTap: _onItemTapped,
       ),

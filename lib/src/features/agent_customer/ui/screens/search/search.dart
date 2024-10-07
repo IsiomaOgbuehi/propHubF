@@ -21,6 +21,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Text('Categories', style: AppTextStyles.lg.copyWith(fontWeight: FontWeight.w500),),

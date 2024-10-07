@@ -176,6 +176,9 @@ Either<ValueFailure<AgentType>, AgentType> agentValidator(AgentType value) {
 Either<ValueFailure<String>, String> passwordValidator(String value) {
   String failure = '';
 
+  if (value.length < 3) {
+    failure = 'Password cannot be less than 3 characters';
+  }
   if (value.isEmpty) {
     failure = 'Password cannot be empty';
   }

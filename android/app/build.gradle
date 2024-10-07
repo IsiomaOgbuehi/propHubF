@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.noxa.prophub"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34 //flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {

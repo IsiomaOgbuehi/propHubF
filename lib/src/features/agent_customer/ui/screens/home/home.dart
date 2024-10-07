@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:prophub/src/features/agent_customer/ui/screens/home/widgets/filter_btn.dart';
+import 'package:prophub/src/state/auth/state_notifiers/app_user_state_notifier.dart';
 import 'package:prophub/src/theme/app_colors.dart';
 import 'package:prophub/src/theme/app_text_styles.dart';
 import 'package:prophub/src/utilities/constants/app_constants.dart';
@@ -27,8 +28,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           title: Text(
-            'Hello Peter',
+            'Hello, ${ref.read(userDataProvider).userData.firstname}',
             style: AppTextStyles.lg.copyWith(fontWeight: FontWeight.w600),
+            overflow: TextOverflow.ellipsis,
           ),
           actions: <Widget>[
             Padding(
@@ -55,7 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           const Icon(Icons.location_on_outlined),
                           Text(
-                            'Oyigbo, Rivers State',
+                            '${ref.read(userDataProvider).userData.lga}, ${ref.read(userDataProvider).userData.state}',
                             style: AppTextStyles.md.copyWith(color: Colors.grey),
                           )
                         ],
@@ -86,57 +88,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  Padding(padding: EdgeInsets.only(left: Constants.scaffoldHorizontalPadding),
-                  child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    height: 170.h,
-                    decoration: const BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(Constants.borderRadius), bottomLeft: Radius.circular(Constants.borderRadius))
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(child: Container()),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: Constants.horizontalPadding, vertical: Constants.verticalPaddingSm),
-                          height: 60,
-                          decoration: const BoxDecoration(color: AppColors.primary),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Demix Home Apartment', style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                                  SizedBox(height: 2.h,),
-                                  Text('2 beds / 2 Baths / 1,200Ft', style: AppTextStyles.xs.copyWith(color: Colors.white,))
-                                ],
-                              ),
-                              Text('N1,200,000.00', style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),)
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Padding(padding: EdgeInsets.only(right: Constants.scaffoldHorizontalPadding),
+                  Padding(
+                      padding: EdgeInsets.only(left: Constants.scaffoldHorizontalPadding),
                       child: Container(
                         clipBehavior: Clip.hardEdge,
                         height: 170.h,
                         decoration: const BoxDecoration(
                             color: Colors.grey,
-                            borderRadius: BorderRadius.only(topRight: Radius.circular(Constants.borderRadius), bottomRight: Radius.circular(Constants.borderRadius))
-                        ),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(Constants.borderRadius),
+                                bottomLeft: Radius.circular(Constants.borderRadius))),
                         child: Column(
                           children: [
                             Expanded(child: Container()),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: Constants.horizontalPadding, vertical: Constants.verticalPaddingSm),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Constants.horizontalPadding, vertical: Constants.verticalPaddingSm),
                               height: 60,
                               decoration: const BoxDecoration(color: AppColors.primary),
                               child: Row(
@@ -146,35 +113,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('Demix Home Apartment', style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 2.h,),
-                                      Text('2 beds / 2 Baths / 1,200Ft', style: AppTextStyles.xs.copyWith(color: Colors.white,))
+                                      Text(
+                                        'Demix Home Apartment',
+                                        style:
+                                            AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 2.h,
+                                      ),
+                                      Text('2 beds / 2 Baths / 1,200Ft',
+                                          style: AppTextStyles.xs.copyWith(
+                                            color: Colors.white,
+                                          ))
                                     ],
                                   ),
-                                  Text('N1,200,000.00', style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),)
+                                  Text(
+                                    'N1,200,000.00',
+                                    style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                  )
                                 ],
                               ),
                             )
                           ],
                         ),
-                      )
-                  ),
+                      )),
                   SizedBox(
                     height: 20.h,
                   ),
-                  Padding(padding: EdgeInsets.only(left: Constants.scaffoldHorizontalPadding),
+                  Padding(
+                      padding: EdgeInsets.only(right: Constants.scaffoldHorizontalPadding),
                       child: Container(
                         clipBehavior: Clip.hardEdge,
                         height: 170.h,
                         decoration: const BoxDecoration(
                             color: Colors.grey,
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(Constants.borderRadius), bottomLeft: Radius.circular(Constants.borderRadius))
-                        ),
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(Constants.borderRadius),
+                                bottomRight: Radius.circular(Constants.borderRadius))),
                         child: Column(
                           children: [
                             Expanded(child: Container()),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: Constants.horizontalPadding, vertical: Constants.verticalPaddingSm),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Constants.horizontalPadding, vertical: Constants.verticalPaddingSm),
                               height: 60,
                               decoration: const BoxDecoration(color: AppColors.primary),
                               child: Row(
@@ -184,19 +165,82 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('Demix Home Apartment', style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 2.h,),
-                                      Text('2 beds / 2 Baths / 1,200Ft', style: AppTextStyles.xs.copyWith(color: Colors.white,))
+                                      Text(
+                                        'Demix Home Apartment',
+                                        style:
+                                            AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 2.h,
+                                      ),
+                                      Text('2 beds / 2 Baths / 1,200Ft',
+                                          style: AppTextStyles.xs.copyWith(
+                                            color: Colors.white,
+                                          ))
                                     ],
                                   ),
-                                  Text('N1,200,000.00', style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),)
+                                  Text(
+                                    'N1,200,000.00',
+                                    style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                  )
                                 ],
                               ),
                             )
                           ],
                         ),
-                      )
+                      )),
+                  SizedBox(
+                    height: 20.h,
                   ),
+                  Padding(
+                      padding: EdgeInsets.only(left: Constants.scaffoldHorizontalPadding),
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: 170.h,
+                        decoration: const BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(Constants.borderRadius),
+                                bottomLeft: Radius.circular(Constants.borderRadius))),
+                        child: Column(
+                          children: [
+                            Expanded(child: Container()),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Constants.horizontalPadding, vertical: Constants.verticalPaddingSm),
+                              height: 60,
+                              decoration: const BoxDecoration(color: AppColors.primary),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Demix Home Apartment',
+                                        style:
+                                            AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 2.h,
+                                      ),
+                                      Text('2 beds / 2 Baths / 1,200Ft',
+                                          style: AppTextStyles.xs.copyWith(
+                                            color: Colors.white,
+                                          ))
+                                    ],
+                                  ),
+                                  Text(
+                                    'N1,200,000.00',
+                                    style: AppTextStyles.md.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
                   SizedBox(
                     height: 20.h,
                   )
