@@ -75,6 +75,7 @@ class PropHubListTile extends StatelessWidget {
           ),
         ),
       ),
+      // Column(children: [],)
     );
   }
 }

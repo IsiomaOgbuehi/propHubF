@@ -47,6 +47,7 @@ dependencies:
   iconsax_flutter: ^1.0.0
   dio: ^5.7.0
   flutter_secure_storage: ^9.2.2
+  socket_io_client: ^3.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

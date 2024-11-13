@@ -30,15 +30,15 @@ class LoginStateNotifier extends StateNotifier<LoginViewState> {
       if (result.isRight) {
         final right = result.right;
         await Future.wait([
-          ref.read(akuStorageProvider).setAuthToken(right.token),
-          ref.read(akuStorageProvider).setUserId(right.userResponse.userId),
-          ref.read(akuStorageProvider).setFirstname(right.userResponse.firstname),
-          ref.read(akuStorageProvider).setLastname(right.userResponse.lastname),
-          ref.read(akuStorageProvider).setUserEmail(right.userResponse.email),
-          ref.read(akuStorageProvider).setPhone(right.userResponse.phone),
-          ref.read(akuStorageProvider).setUserType(right.userResponse.userType),
-          ref.read(akuStorageProvider).setUserState(right.userResponse.state),
-          ref.read(akuStorageProvider).setUserLga(right.userResponse.lga),
+          ref.read(propHubStorageProvider).setAuthToken(right.token),
+          ref.read(propHubStorageProvider).setUserId(right.userResponse.userId),
+          ref.read(propHubStorageProvider).setFirstname(right.userResponse.firstname),
+          ref.read(propHubStorageProvider).setLastname(right.userResponse.lastname),
+          ref.read(propHubStorageProvider).setUserEmail(right.userResponse.email),
+          ref.read(propHubStorageProvider).setPhone(right.userResponse.phone),
+          ref.read(propHubStorageProvider).setUserType(right.userResponse.userType),
+          ref.read(propHubStorageProvider).setUserState(right.userResponse.state),
+          ref.read(propHubStorageProvider).setUserLga(right.userResponse.lga),
         ]);
       }
 

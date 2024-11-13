@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final akuStorageProvider = Provider.autoDispose((ref) {
+final propHubStorageProvider = Provider.autoDispose((ref) {
   return AppStorage();
 });
 
@@ -61,5 +61,17 @@ class AppStorage {
 
   Future<String> getFirstname() async {
     return await storage.read(key: firstname) ?? '';
+  }
+
+  Future<String> getAuthTokenVal() async {
+    return await storage.read(key: authToken) ?? '';
+  }
+
+  Future<String> getRefreshTokenVal() async {
+    return await storage.read(key: refreshToken) ?? '';
+  }
+
+  Future<String> getUserId() async {
+    return await storage.read(key: userId) ?? '';
   }
 }

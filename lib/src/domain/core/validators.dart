@@ -201,3 +201,16 @@ Either<ValueFailure<String>, String> confirmPasswordValidator(String confirmPass
   if (failure.isNotEmpty) return Left(ValueFailure(confirmPassword, failure));
   return Right(confirmPassword);
 }
+
+Either<ValueFailure<String>, String> chatMessageValidator(String value) {
+  String failure = '';
+  if (value.length < 3) {
+    failure = 'Chat cannot be less than 3 characters';
+  }
+  if (value.isEmpty) {
+    failure = 'Chat cannot be empty';
+  }
+
+  if (failure.isNotEmpty) return Left(ValueFailure(value, failure));
+  return Right(value);
+}

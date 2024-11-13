@@ -143,3 +143,12 @@ class ConfirmPassword extends ValueObject<String> {
 
   const ConfirmPassword._(this.value);
 }
+
+class ChatMessage extends ValueObject<String> {
+  @override
+  final Either<ValueFailure<String>, String> value;
+
+  factory ChatMessage(String input) => ChatMessage._(chatMessageValidator(input));
+
+  const ChatMessage._(this.value);
+}

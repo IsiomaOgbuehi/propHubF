@@ -6,6 +6,7 @@ import 'package:prophub/src/exceptions/ground_exception.dart';
 
 import '../utilities/data_transformer.dart';
 import 'exceptions/exceptions.dart';
+import 'interceptors.dart';
 
 const bool _showLogs = kDebugMode;
 
@@ -15,7 +16,7 @@ class AppNetworkProvider {
   Dio _getDioInstance() {
     var dio = Dio(BaseOptions(
         connectTimeout: const Duration(milliseconds: 30000), receiveTimeout: const Duration(milliseconds: 60000)));
-    // dio.interceptors.add(AppInterceptor());
+    dio.interceptors.add(AppInterceptor());
     dio.interceptors.add(QueuedInterceptorsWrapper(onError: (error, handler) async {
       if (error.response?.statusCode == 401) {
         if (retries == 1) return handler.next(error);
@@ -138,7 +139,7 @@ class AppNetworkProvider {
     try {
       final dioInstance = _getDioInstance();
       response = await switch (method) {
-        RequestMethod.get => dioInstance.get(path, queryParameters: queryParams),
+        RequestMethod.get => dioInstance.get(path, queryParameters: queryParams,),
         RequestMethod.post => dioInstance.post(path, data: body, queryParameters: queryParams, options: options),
         RequestMethod.patch => dioInstance.patch(path, data: body, queryParameters: queryParams),
         RequestMethod.put => dioInstance.put(path, data: body, queryParameters: queryParams),
