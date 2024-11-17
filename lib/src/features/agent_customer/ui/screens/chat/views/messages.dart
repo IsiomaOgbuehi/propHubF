@@ -53,33 +53,31 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                       ),
                     ],
                   ))),
-                  Column(
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          PropHubBackgroundTextField(
-                            controller: _messageController,
-                            title: 'Message',
-                            background: Colors.grey.withOpacity(0.2),
-                            inputRadius: 50.0,
-                            onChanged: ref.watch(chatProvider.notifier).chatMessageOnchange,
-                          ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          OutlinedButton(
-                              onPressed: () => ref.read(chatProvider.notifier).sendMessage,
-                              child: Icon(
-                                Iconsax.send_1,
-                                size: 30.0,
-                                color: ref.watch(chatProvider).chatMessage.isValid ? Colors.lightGreen : Colors.black38,
-                              ))
-                        ],
+                      Expanded(
+                        child: PropHubBackgroundTextField(
+                          controller: ref.watch(chatProvider).messageController,
+                          title: 'Message',
+                          background: Colors.grey.withOpacity(0.2),
+                          inputRadius: 50.0,
+                          onChanged: ref.watch(chatProvider.notifier).chatMessageOnchange,
+                        ),
                       ),
                       const SizedBox(
-                        height: 5.0,
-                      )
+                        width: 10.0,
+                      ),
+                      OutlinedButton(
+                          onPressed: () => ref.read(chatProvider.notifier).sendMessage(widget.connectedUserId),
+                          child: Icon(
+                            Iconsax.send_1,
+                            size: 30.0,
+                            color: ref.watch(chatProvider).chatMessage.isValid ? Colors.lightGreen : Colors.black38,
+                          ))
                     ],
+                  ),
+                  const SizedBox(
+                    height: 5.0,
                   )
                 ],
               ),

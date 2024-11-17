@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:prophub/src/domain/core/prophub_view_model.dart';
 import 'package:prophub/src/domain/core/value_failure.dart';
 import 'package:prophub/src/domain/core/value_objects.dart';
@@ -18,11 +19,23 @@ class ChatViewState extends PropHubViewUiState<ChatViewState> {
 
   final List<ChatMessageContent> privateChatMessages;
 
+  final TextEditingController messageController;
+
   const ChatViewState(
-      {required this.error, required this.viewState, required this.connectedUsers, required this.chatMessage, required this.privateChatMessages});
+      {required this.error,
+      required this.viewState,
+      required this.connectedUsers,
+      required this.chatMessage,
+      required this.privateChatMessages,
+      required this.messageController});
 
   factory ChatViewState.initial() => ChatViewState(
-      error: const EmptyException(), viewState: ViewState.idle, connectedUsers: const [], chatMessage: ChatMessage(''), privateChatMessages: const []);
+      error: const EmptyException(),
+      viewState: ViewState.idle,
+      connectedUsers: const [],
+      chatMessage: ChatMessage(''),
+      privateChatMessages: const [],
+      messageController: TextEditingController());
 
   @override
   ChatViewState copyWith(
@@ -30,13 +43,15 @@ class ChatViewState extends PropHubViewUiState<ChatViewState> {
           PropHubExceptions? error,
           List<UserResponse>? connectedUsers,
           ChatMessage? chatMessage,
-            List<ChatMessageContent>? privateChatMessages}) =>
+          List<ChatMessageContent>? privateChatMessages,
+          TextEditingController? messageController}) =>
       ChatViewState(
           error: error ?? this.error,
           viewState: viewState ?? this.viewState,
           connectedUsers: connectedUsers ?? this.connectedUsers,
           chatMessage: chatMessage ?? this.chatMessage,
-          privateChatMessages: privateChatMessages ?? this.privateChatMessages);
+          privateChatMessages: privateChatMessages ?? this.privateChatMessages,
+          messageController: messageController ?? this.messageController);
 
   Option<ValueFailure<dynamic>> get failureOption {
     return chatMessage.failureOrNone.fold(() => const None(), (value) => Some(value));

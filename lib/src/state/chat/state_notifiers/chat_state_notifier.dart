@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prophub/src/domain/core/prophub_view_model.dart';
 import 'package:prophub/src/domain/core/value_objects.dart';
@@ -14,6 +15,12 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
   final StateNotifierProviderRef ref;
   ChatStateNotifier(this.ref) : super(ChatViewState.initial());
   late IO.Socket socket;
+
+  @override
+  void dispose() {
+    super.dispose();
+    state.messageController.dispose();
+  }
 
   void getConnectedUsers() async {
     await launch(state.reference, (model) async {
@@ -36,16 +43,15 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
   }
 
   void initSocket() {
-    socket = IO.io(ApiConfig.socketUrl, <String, dynamic>{
-      'transports': ['websocket'],
-    });
+    socket = IO.io(ApiConfig.socketUrl, IO.OptionBuilder()
+        .setTransports(['websocket'])// optional
+        .build());
+
     socket.connect();
 
     /// ADD USER TO SOCKET
+    socket.emit(ChatEvents.connection.toEventName); //
     socket.emit(ChatEvents.addUser.toEventName, ref.read(userDataProvider).userData.userId);
-    socket.on(ChatEvents.addUser.toEventName, (data){
-      print('Received response: $data');
-    });
   }
 
   void sendMessage(String connectedUserId) {
@@ -57,8 +63,10 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
     /// Listen for response
     socket.on(ChatEvents.privateMessage.toEventName, (data) {
       print('Received response: $data');
+      // {content: I dey ooo, from: hXhiC7NFphXl8d3IAAAF}
     });
 
+    state = state.copyWith(messageController: TextEditingController());
     chatMessageOnchange('');
   }
 

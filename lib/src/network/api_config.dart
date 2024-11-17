@@ -9,5 +9,5 @@ class ApiConfig {
   static const String getConnectedUsers = '$_baseUrl/users/connected';
 
   /// GET ALL PRIVATE CHAT MESSAGES
-  static String getPrivateChatMessages(String connectedUserId) => '$_baseUrl/allMessages/$connectedUserId';
+  static String getPrivateChatMessages(String connectedUserId) => '$_baseUrl/private/allMessages/$connectedUserId';
 }

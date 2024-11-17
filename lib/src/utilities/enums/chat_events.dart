@@ -1,4 +1,5 @@
 enum ChatEvents {
+  connection('connection'),
   addUser('addUser'),
   privateMessage('privateMessage');
 
