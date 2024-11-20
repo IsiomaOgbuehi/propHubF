@@ -5,6 +5,7 @@ import 'package:prophub/src/domain/core/value_objects.dart';
 import 'package:prophub/src/network/api_config.dart';
 import 'package:prophub/src/repository/chat/chat_repository.dart';
 import 'package:prophub/src/state/auth/state_notifiers/app_user_state_notifier.dart';
+import 'package:prophub/src/state/chat/view_models/response/chat_message_content.dart';
 import 'package:prophub/src/state/chat/view_state/chat_view_state.dart';
 import 'package:prophub/src/utilities/enums/chat_events.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -43,28 +44,36 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
   }
 
   void initSocket() {
-    socket = IO.io(ApiConfig.socketUrl, IO.OptionBuilder()
-        .setTransports(['websocket'])// optional
-        .build());
+    socket = IO.io(
+        ApiConfig.socketUrl,
+        IO.OptionBuilder().setTransports(['websocket']) // optional
+            .build());
 
     socket.connect();
 
     /// ADD USER TO SOCKET
-    socket.emit(ChatEvents.connection.toEventName); //
     socket.emit(ChatEvents.addUser.toEventName, ref.read(userDataProvider).userData.userId);
-  }
-
-  void sendMessage(String connectedUserId) {
-    if(!state.chatMessage.isValid) return;
-
-    /// Emit an event
-    socket.emit(ChatEvents.privateMessage.toEventName, [state.chatMessage.getOrCrash(), connectedUserId]);
 
     /// Listen for response
     socket.on(ChatEvents.privateMessage.toEventName, (data) {
-      print('Received response: $data');
-      // {content: I dey ooo, from: hXhiC7NFphXl8d3IAAAF}
+      final chatData = ChatMessageContent.fromJson(data);
+      state = state.copyWith(privateChatMessages: {...state.privateChatMessages, chatData}.toList());
     });
+  }
+
+  void sendMessage(String connectedUserId) {
+    if (!state.chatMessage.isValid || connectedUserId.isEmpty) return;
+
+    /// Emit an event
+    socket.emit(ChatEvents.privateMessage.toEventName,
+        [state.chatMessage.getOrCrash(), connectedUserId, ref.read(userDataProvider).userData.userId]);
+    final chatData = ChatMessageContent(
+        chatId: '',
+        senderId: ref.read(userDataProvider).userData.userId,
+        receiverId: connectedUserId,
+        content: state.chatMessage.getOrCrash(),
+        createdAt: DateTime.now().toString());
+    state = state.copyWith(privateChatMessages: {...state.privateChatMessages, chatData}.toList());
 
     state = state.copyWith(messageController: TextEditingController());
     chatMessageOnchange('');

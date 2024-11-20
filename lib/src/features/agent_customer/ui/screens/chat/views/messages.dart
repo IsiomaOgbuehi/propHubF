@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:prophub/src/state/auth/state_notifiers/app_user_state_notifier.dart';
 import 'package:prophub/src/state/chat/state_notifiers/chat_state_notifier.dart';
 import 'package:prophub/src/widgets/scaffold/platform_scaffold.dart';
 import 'package:prophub/src/widgets/text_input/ProphubTextfield.dart';
@@ -39,20 +40,14 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
         body: (context) => SafeArea(
               child: Column(
                 children: [
-                  const Expanded(
-                      child: SingleChildScrollView(
-                          child: Column(
-                    children: [
-                      MessageBox(
-                        sentMessage: true,
-                        message: 'Recharge the leave power',
-                      ),
-                      MessageBox(
-                        sentMessage: false,
-                        message: 'Taken in the bar of business',
-                      ),
-                    ],
-                  ))),
+                   Expanded(
+                      child: ListView.builder(
+                        itemCount: ref.watch(chatProvider).privateChatMessages.length,
+                          itemBuilder: (context, index) {
+                          final chatItem = ref.watch(chatProvider).privateChatMessages;
+                        return MessageBox(sentMessage: chatItem[index].senderId == ref.read(userDataProvider).userData.userId, message: chatItem[index].content, chatDate: chatItem[index].createdAt,);
+                      })),
+                  const SizedBox(height: 10.0,),
                   Row(
                     children: [
                       Expanded(
@@ -69,11 +64,19 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                       ),
                       OutlinedButton(
                           onPressed: () => ref.read(chatProvider.notifier).sendMessage(widget.connectedUserId),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size.zero, // Set this
+                            padding: EdgeInsets.zero,
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                            ),// and this
+                          ),
                           child: Icon(
                             Iconsax.send_1,
-                            size: 30.0,
+                            size: 40.0,
                             color: ref.watch(chatProvider).chatMessage.isValid ? Colors.lightGreen : Colors.black38,
-                          ))
+                          )
+                      )
                     ],
                   ),
                   const SizedBox(

@@ -204,7 +204,7 @@ Either<ValueFailure<String>, String> confirmPasswordValidator(String confirmPass
 
 Either<ValueFailure<String>, String> chatMessageValidator(String value) {
   String failure = '';
-  if (value.length < 3) {
+  if (value.length < 2) {
     failure = 'Chat cannot be less than 3 characters';
   }
   if (value.isEmpty) {
