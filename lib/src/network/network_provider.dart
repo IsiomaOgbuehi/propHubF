@@ -18,17 +18,17 @@ class AppNetworkProvider {
         connectTimeout: const Duration(milliseconds: 30000), receiveTimeout: const Duration(milliseconds: 60000)));
     dio.interceptors.add(AppInterceptor());
     dio.interceptors.add(QueuedInterceptorsWrapper(onError: (error, handler) async {
-      if (error.response?.statusCode == 401) {
-        if (retries == 1) return handler.next(error);
-        retries++;
-        try {
-          // await refreshToken();
-          handler.resolve(await _retry(error.requestOptions));
-        } on PropHubExceptions {
-          handler.next(error);
-        }
-        return;
-      }
+      // if (error.response?.statusCode == 401) {
+      //   if (retries == 1) return handler.next(error);
+      //   retries++;
+      //   try {
+      //     // await refreshToken();
+      //     // handler.resolve(await _retry(error.requestOptions));
+      //   } on PropHubExceptions {
+      //     handler.next(error);
+      //   }
+      //   return;
+      // }
       handler.next(error);
     }));
 

@@ -16,11 +16,14 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
   final StateNotifierProviderRef ref;
   ChatStateNotifier(this.ref) : super(ChatViewState.initial());
   late IO.Socket socket;
+  bool isSocketInitialized = false;
 
   @override
   void dispose() {
     super.dispose();
     state.messageController.dispose();
+    socket.disconnect();
+    socket.off(ChatEvents.privateMessage.toEventName);
   }
 
   void getConnectedUsers() async {
@@ -33,17 +36,24 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
     });
   }
 
-  void getPrivateChatMessages(String connectedUserId) async {
+  void getPrivateChatMessages(String connectedUserId, [Function? callBack]) async {
     await launch(state.reference, (model) async {
       final response = await ref.read(chatRepositoryProvider).getPrivateChatMessages(connectedUserId);
 
       state = model.emit(response.fold((left) => state.copyWith(viewState: ViewState.error, error: left), (right) {
         return state.copyWith(viewState: ViewState.success, privateChatMessages: right);
       }));
+      Future.delayed(const Duration(seconds: 2), () {
+      callBack?.call();
+      });
+
     });
   }
 
   void initSocket() {
+    if (isSocketInitialized) return;
+    isSocketInitialized = true;
+
     socket = IO.io(
         ApiConfig.socketUrl,
         IO.OptionBuilder().setTransports(['websocket']) // optional
@@ -55,10 +65,7 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
     socket.emit(ChatEvents.addUser.toEventName, ref.read(userDataProvider).userData.userId);
 
     /// Listen for response
-    socket.on(ChatEvents.privateMessage.toEventName, (data) {
-      final chatData = ChatMessageContent.fromJson(data);
-      state = state.copyWith(privateChatMessages: {...state.privateChatMessages, chatData}.toList());
-    });
+    listenToPrivateMessages();
   }
 
   void sendMessage(String connectedUserId) {
@@ -67,13 +74,6 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
     /// Emit an event
     socket.emit(ChatEvents.privateMessage.toEventName,
         [state.chatMessage.getOrCrash(), connectedUserId, ref.read(userDataProvider).userData.userId]);
-    final chatData = ChatMessageContent(
-        chatId: '',
-        senderId: ref.read(userDataProvider).userData.userId,
-        receiverId: connectedUserId,
-        content: state.chatMessage.getOrCrash(),
-        createdAt: DateTime.now().toString());
-    state = state.copyWith(privateChatMessages: {...state.privateChatMessages, chatData}.toList());
 
     state = state.copyWith(messageController: TextEditingController());
     chatMessageOnchange('');
@@ -82,4 +82,14 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
   void chatMessageOnchange(String input) {
     state = state.copyWith(chatMessage: ChatMessage(input));
   }
+
+  void listenToPrivateMessages() {
+    socket.off(ChatEvents.privateMessage.toEventName); // Prevent duplicate listeners
+    socket.on(ChatEvents.privateMessage.toEventName, (data) {
+      final chatData = ChatMessageContent.fromJson(data);
+      state = state.copyWith(
+          privateChatMessages: {...state.privateChatMessages, chatData}.toList());
+    });
+  }
+
 }

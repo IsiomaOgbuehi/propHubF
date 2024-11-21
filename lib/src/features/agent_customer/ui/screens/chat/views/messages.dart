@@ -17,19 +17,40 @@ class MessageScreen extends ConsumerStatefulWidget {
 }
 
 class _MessageScreenState extends ConsumerState<MessageScreen> {
-  final _messageController = TextEditingController();
+  final ScrollController _controller = ScrollController();
+  int initialScroll = 0;
+
+  void _scrollDown() {
+    _controller.animateTo(
+      _controller.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+    initialScroll = 1;
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
-      ref.read(chatProvider.notifier).getPrivateChatMessages(widget.connectedUserId);
+      ref.read(chatProvider.notifier).getPrivateChatMessages(widget.connectedUserId, _scrollDown);
       ref.read(chatProvider.notifier).initSocket();
     });
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ref.listen(chatProvider.select((value) => value.privateChatMessages), (previous, next) {
+      if(previous!.isNotEmpty && initialScroll == 0) {
+        _scrollDown();
+      }
+    });
     return PlatformScaffold(
         backgroundColor: Colors.white24.withOpacity(0.9),
         resizeToAvoidBottomInset: true,
@@ -40,14 +61,21 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
         body: (context) => SafeArea(
               child: Column(
                 children: [
-                   Expanded(
+                  Expanded(
                       child: ListView.builder(
-                        itemCount: ref.watch(chatProvider).privateChatMessages.length,
+                          controller: _controller,
+                          itemCount: ref.watch(chatProvider).privateChatMessages.length,
                           itemBuilder: (context, index) {
-                          final chatItem = ref.watch(chatProvider).privateChatMessages;
-                        return MessageBox(sentMessage: chatItem[index].senderId == ref.read(userDataProvider).userData.userId, message: chatItem[index].content, chatDate: chatItem[index].createdAt,);
-                      })),
-                  const SizedBox(height: 10.0,),
+                            final chatItem = ref.watch(chatProvider).privateChatMessages;
+                            return MessageBox(
+                              sentMessage: chatItem[index].senderId == ref.read(userDataProvider).userData.userId,
+                              message: chatItem[index].content,
+                              chatDate: chatItem[index].createdAt,
+                            );
+                          })),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -69,14 +97,13 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                             padding: EdgeInsets.zero,
                             side: const BorderSide(
                               color: Colors.transparent,
-                            ),// and this
+                            ), // and this
                           ),
                           child: Icon(
                             Iconsax.send_1,
                             size: 40.0,
                             color: ref.watch(chatProvider).chatMessage.isValid ? Colors.lightGreen : Colors.black38,
-                          )
-                      )
+                          ))
                     ],
                   ),
                   const SizedBox(

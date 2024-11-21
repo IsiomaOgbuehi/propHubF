@@ -1,5 +1,6 @@
 import 'package:prophub/src/exceptions/ground_exception.dart';
 import 'package:dio/dio.dart';
+import 'package:prophub/src/network/exceptions/unauthorized_exception.dart';
 
 class ResponseException extends PropHubExceptions {
   final int? statusCode;
@@ -47,7 +48,7 @@ class ResponseException extends PropHubExceptions {
           exception = const ResponseException(errorMessage: "Receive timeout in connection");
           break;
         case DioExceptionType.badResponse:
-          if (dioError.response?.statusCode == 401) throw dioError.response!.data; // UnauthorizedException.fromJson(dioError.response!.data);
+          if (dioError.response?.statusCode == 401) UnauthorizedException.fromJson(dioError.response!.data);
           if (dioError.response?.statusCode == 402) throw dioError.response!.data; // PaymentRequiredException.fromJson(dioError.response!.data);
           if (dioError.response?.statusCode == 405) {
             throw const ResponseException(errorMessage: 'An Error Occurred. We\'re working to fix it');
