@@ -99,7 +99,7 @@ class _AuthDetailsState extends ConsumerState<AuthDetails> {
             child: PropFlatButton(
               isDisabled: ValueNotifier(provider.authDetailsForm.failureOption.isSome()),
               title: 'Submit',
-              onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const BottomNav())) ,
+              onTap: () => ref.read(onBoardingProvider.notifier).submitAction(context),
               buttonColor: Colors.blueGrey,
               textColor: Colors.white,
             ),

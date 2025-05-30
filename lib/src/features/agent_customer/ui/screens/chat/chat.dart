@@ -50,9 +50,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             PopupMenuItem(
                               value: 'add_group',
                               child: ListTile(
-                                leading: Icon(Icons.add_circle_outline_sharp),
-                                title: const Text('Add Group'),
-                                onTap: () {},
+                                leading: const Icon(Icons.add_circle_outline_sharp),
+                                title: const Text('Create Group'),
+                                onTap: () {
+                                  context.pop();
+                                },
                               ),
                             ),
                           ])

@@ -88,7 +88,7 @@ class _LoginState extends ConsumerState<Login> {
                       child: PropFlatButton(
                         isLoading: isLoading,
                         title: 'Login',
-                        onTap: ref.read(loginProvider.notifier).loginBtnOnTap,
+                        onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const BottomNav())), // ref.read(loginProvider.notifier).loginBtnOnTap,
                         buttonColor: Colors.blueGrey,
                         textColor: Colors.white,
                         isDisabled: ValueNotifier(ref.watch(loginProvider).loginForm.failureOption.isSome()),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prophub/src/domain/core/prophub_view_model.dart';
 import 'package:prophub/src/theme/app_images.dart';
 import 'package:prophub/src/utilities/constants/app_constants.dart';
 import '../../../../../state/onboarding/state_notifiers/onboarding_state_notifier.dart';
+import '../../screens/bottom_nav.dart';
 import 'personal_details.dart';
 import 'address.dart';
 import 'auth_details.dart';
@@ -25,8 +27,16 @@ class _OnBoardingStepsState extends ConsumerState<OnBoardingSteps> {
     final provider = ref.watch(onBoardingProvider);
     final providerAction = ref.watch(onBoardingProvider.notifier);
 
-    return WillPopScope(
-        onWillPop: () async => provider.pageNumber == 0 ? true : false,
+    ref.listen(onBoardingProvider.select((state) => state.viewState), (previous, next) {
+      if(next == ViewState.error) {
+
+        return;
+      }
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const BottomNav()));
+    });
+
+    return PopScope(
+        canPop: provider.pageNumber == 0 ? true : false,
         child: Stack(
           children: [
             Container(

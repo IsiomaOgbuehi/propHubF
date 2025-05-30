@@ -7,8 +7,12 @@ import 'package:prophub/src/network/network_provider.dart';
 import 'package:prophub/src/state/auth/view_models/response/login_response.dart';
 import 'package:prophub/src/utilities/data_transformer.dart';
 
+import '../../state/onboarding/view_models/request/onboarding_request.dart';
+
 abstract class AuthRepository {
   Future<Either<PropHubExceptions, LoginResponse>> login(LoginEntity loginData);
+
+  Future<Either<PropHubExceptions, LoginResponse>> createAccount(OnBoardingRequest request);
 }
 
 final authRepositoryProvider = Provider(
@@ -22,6 +26,13 @@ class AuthRepositoryImp extends AuthRepository {
   @override
   Future<Either<PropHubExceptions, LoginResponse>> login(LoginEntity loginData) async {
     final response = await _provider.call(path: ApiConfig.login, method: RequestMethod.post, body: loginData.toJson());
+    return await processData((p0) => LoginResponse.fromJson(p0), response);
+  }
+
+  @override
+  Future<Either<PropHubExceptions, LoginResponse>> createAccount(OnBoardingRequest request) async {
+    final response = await _provider.call(path: ApiConfig.signUp, method: RequestMethod.post, body: request.toJson());
+    
     return await processData((p0) => LoginResponse.fromJson(p0), response);
   }
 }

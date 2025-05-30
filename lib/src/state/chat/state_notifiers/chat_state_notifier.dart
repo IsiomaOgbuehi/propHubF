@@ -92,4 +92,6 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
     });
   }
 
+  void createGroup() {}
+
 }

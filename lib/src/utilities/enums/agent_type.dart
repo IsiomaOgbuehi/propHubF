@@ -5,7 +5,8 @@ enum AgentType {
   propertyDevelopmentMgt('PROPERTY_DEVELOPMENT', 'Property Development & Mgt'),
   artisan('ARTISAN', 'Artisan'),
   advertisingAgent('ADVERTISING_AGENT', 'Advertising Agent'),
-  businessAgent('BUSINESS_AGENT', 'Business Agent');
+  businessAgent('BUSINESS_AGENT', 'Business Agent'),
+  customer('CUSTOMER', 'Customer');
 
   const AgentType(this.jsonString, this.value);
 

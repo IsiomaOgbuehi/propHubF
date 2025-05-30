@@ -7,10 +7,9 @@ class OnBoardingRequest {
   final String email;
   final String address;
   final String password;
-  final String? confirmPassword;
-  final String? state;
-  final String? lga;
-  final String? agentType;
+  final String state;
+  final String lga;
+  final String agentType;
 
   const OnBoardingRequest(
       {required this.firstname,
@@ -21,10 +20,9 @@ class OnBoardingRequest {
       required this.email,
       required this.address,
       required this.password,
-      this.confirmPassword,
-      this.state,
-      this.lga,
-      this.agentType});
+      required this.state,
+      required this.lga,
+      required this.agentType});
 
   Map<String, dynamic> toJson() => {
         "firstname": firstname,
@@ -35,9 +33,8 @@ class OnBoardingRequest {
         "businessAddress": address,
         "email": email,
         "password": password,
-        "confirmPassword": confirmPassword,
         "lga": lga,
         "state": state,
-        "agentType": agentType
+        "userType": agentType
       };
 }
