@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prophub/src/domain/core/prophub_view_model.dart';
 import 'package:prophub/src/features/agent_customer/ui/screens/bottom_nav.dart';
 import 'package:prophub/src/state/onboarding/state_notifiers/onboarding_state_notifier.dart';
 
@@ -97,7 +98,8 @@ class _AuthDetailsState extends ConsumerState<AuthDetails> {
           SizedBox(
             width: width(context) - 40,
             child: PropFlatButton(
-              isDisabled: ValueNotifier(provider.authDetailsForm.failureOption.isSome()),
+              isLoading: ValueNotifier(provider.viewState == ViewState.loading),
+              isDisabled: ValueNotifier(provider.authDetailsForm.failureOption.isSome() || provider.viewState == ViewState.loading),
               title: 'Submit',
               onTap: () => ref.read(onBoardingProvider.notifier).submitAction(context),
               buttonColor: Colors.blueGrey,

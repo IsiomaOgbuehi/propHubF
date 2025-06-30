@@ -59,7 +59,7 @@ class ResponseException extends PropHubExceptions {
           }
           if (dioError.response?.statusCode == 428) throw dioError.response!.data; // AuthRequiredException.fromJson(dioError.response!.data);
           if ((dioError.response?.statusCode ?? 400) >= 500) {
-            throw const ResponseException(errorMessage: 'An Error Occurred. We\'re working to fix it');
+            throw ResponseException(errorMessage: dioError.response?.statusMessage ?? 'An Error Occurred. We\'re working to fix it');
           }
           exception = ResponseException.fromJson(dioError.response!.data);
           break;

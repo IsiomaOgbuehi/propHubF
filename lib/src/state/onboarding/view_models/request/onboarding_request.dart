@@ -30,7 +30,7 @@ class OnBoardingRequest {
         "lastname": lastname,
         "gender": gender,
         "phone": phone,
-        "businessAddress": address,
+        "address": address,
         "email": email,
         "password": password,
         "lga": lga,
