@@ -27,15 +27,22 @@ class _AuthDetailsState extends ConsumerState<AuthDetails> {
     super.didChangeDependencies();
     final provider = ref.watch(onBoardingProvider);
 
-    _email.text = provider.authDetailsForm.email.isValid ? provider.authDetailsForm.email.getOrCrash() : '';
-    _phone.text = provider.authDetailsForm.phoneNumber.isValid ? provider.authDetailsForm.phoneNumber.getOrCrash() : '';
-    _password.text = provider.authDetailsForm.password.isValid ? provider.authDetailsForm.password.getOrCrash() : '';
-    _confirmPassword.text = provider.authDetailsForm.confirmPassword.isValid ? provider.authDetailsForm.confirmPassword.getOrCrash() : '';
+    _email.text = provider.authDetailsForm.email.isValid
+        ? provider.authDetailsForm.email.getOrCrash()
+        : '';
+    _phone.text = provider.authDetailsForm.phoneNumber.isValid
+        ? provider.authDetailsForm.phoneNumber.getOrCrash()
+        : '';
+    _password.text = provider.authDetailsForm.password.isValid
+        ? provider.authDetailsForm.password.getOrCrash()
+        : '';
+    _confirmPassword.text = provider.authDetailsForm.confirmPassword.isValid
+        ? provider.authDetailsForm.confirmPassword.getOrCrash()
+        : '';
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _email.dispose();
     _phone.dispose();
@@ -97,14 +104,20 @@ class _AuthDetailsState extends ConsumerState<AuthDetails> {
           ),
           SizedBox(
             width: width(context) - 40,
-            child: PropFlatButton(
-              isLoading: ValueNotifier(provider.viewState == ViewState.loading),
-              isDisabled: ValueNotifier(provider.authDetailsForm.failureOption.isSome() || provider.viewState == ViewState.loading),
-              title: 'Submit',
-              onTap: () => ref.read(onBoardingProvider.notifier).submitAction(context),
-              buttonColor: Colors.blueGrey,
-              textColor: Colors.white,
-            ),
+            child: IgnorePointer(
+                ignoring: provider.viewState == ViewState.loading,
+                child: PropFlatButton(
+                  isLoading:
+                      ValueNotifier(provider.viewState == ViewState.loading),
+                  isDisabled: ValueNotifier(
+                      provider.authDetailsForm.failureOption.isSome()),
+                  title: 'Submit',
+                  onTap: () => ref
+                      .read(onBoardingProvider.notifier)
+                      .submitAction(context),
+                  buttonColor: Colors.blueGrey,
+                  textColor: Colors.white,
+                )),
           ),
         ],
       ),

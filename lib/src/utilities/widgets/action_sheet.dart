@@ -41,7 +41,7 @@ showPlatformActionSheet({
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 15.5.sp,
-                color: Theme.of(context).textTheme.headline1!.color,
+                color: Theme.of(context).textTheme.headlineLarge!.color,
               ),
             ),
             content: SizedBox(

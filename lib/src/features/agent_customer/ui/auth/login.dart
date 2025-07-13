@@ -27,14 +27,17 @@ class _LoginState extends ConsumerState<Login> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(loginProvider.select((value) => value.viewState), (prev, next) async {
+    ref.listen(loginProvider.select((value) => value.viewState),
+        (prev, next) async {
       isLoading.value = (next == ViewState.loading) ? true : false;
-      if(next == ViewState.error) {
-        await ErrorModal.errorInfo(context, ref.watch(loginProvider).error.message);
+      if (next == ViewState.error) {
+        await ErrorModal.errorInfo(
+            context, ref.watch(loginProvider).error.message);
       }
       if (next == ViewState.success) {
-        if(!mounted) return;
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const BottomNav()));
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => const BottomNav()));
       }
     });
     return Stack(children: [
@@ -60,7 +63,8 @@ class _LoginState extends ConsumerState<Login> {
                     const SizedBox(
                       height: Constants.guttterXXl,
                     ),
-                    Text('Welcome to PropHub', style: AppTextStyles.h3.copyWith(color: Colors.white)),
+                    Text('Welcome to PropHub',
+                        style: AppTextStyles.h3.copyWith(color: Colors.white)),
                     const SizedBox(
                       height: Constants.guttterXXl,
                     ),
@@ -68,7 +72,8 @@ class _LoginState extends ConsumerState<Login> {
                       controller: _email,
                       title: 'Email',
                       color: Colors.transparent,
-                      onChanged: ref.watch(loginProvider.notifier).onChangeEmail,
+                      onChanged:
+                          ref.watch(loginProvider.notifier).onChangeEmail,
                     ),
                     const SizedBox(
                       height: Constants.gutterLg,
@@ -77,7 +82,8 @@ class _LoginState extends ConsumerState<Login> {
                       controller: _password,
                       title: 'Password',
                       color: Colors.transparent,
-                      onChanged: ref.watch(loginProvider.notifier).onChangePassword,
+                      onChanged:
+                          ref.watch(loginProvider.notifier).onChangePassword,
                       obscureText: true,
                     ),
                     const SizedBox(
@@ -85,14 +91,21 @@ class _LoginState extends ConsumerState<Login> {
                     ),
                     SizedBox(
                       width: width(context) - 40,
-                      child: PropFlatButton(
-                        isLoading: isLoading,
-                        title: 'Login',
-                        onTap: ref.read(loginProvider.notifier).loginBtnOnTap,
-                        buttonColor: Colors.blueGrey,
-                        textColor: Colors.white,
-                        isDisabled: ValueNotifier(ref.watch(loginProvider).loginForm.failureOption.isSome()),
-                      ),
+                      child: IgnorePointer(
+                          ignoring: isLoading.value,
+                          child: PropFlatButton(
+                            isLoading: isLoading,
+                            title: 'Login',
+                            onTap:
+                                ref.read(loginProvider.notifier).loginBtnOnTap,
+                            buttonColor: Colors.blueGrey,
+                            textColor: Colors.white,
+                            isDisabled: ValueNotifier(ref
+                                .watch(loginProvider)
+                                .loginForm
+                                .failureOption
+                                .isSome()),
+                          )),
                     ),
                     const SizedBox(
                       height: Constants.gutterMd,
@@ -109,12 +122,15 @@ class _LoginState extends ConsumerState<Login> {
                           width: 10.0,
                         ),
                         InkWell(
-                          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => const OnBoardingSteps(),
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const OnBoardingSteps(),
                           )),
                           child: Text(
                             'Sign Up',
-                            style: AppTextStyles.md.copyWith(color: Colors.blueGrey),
+                            style: AppTextStyles.md
+                                .copyWith(color: Colors.blueGrey),
                           ),
                         )
                       ],

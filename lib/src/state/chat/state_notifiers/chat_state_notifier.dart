@@ -28,6 +28,7 @@ class ChatStateNotifier extends StateNotifier<ChatViewState> {
 
   void getConnectedUsers() async {
     await launch(state.reference, (model) async {
+      state = state.copyWith(viewState: ViewState.loading);
       final response = await ref.read(chatRepositoryProvider).getConnectedUsers();
 
       state = model.emit(response.fold((left) => state.copyWith(viewState: ViewState.error, error: left), (right) {
