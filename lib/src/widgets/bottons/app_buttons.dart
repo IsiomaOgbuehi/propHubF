@@ -289,7 +289,7 @@ class AppOutlineButton extends StatelessWidget {
                   width: 20.w,
                   child: const CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryMerchant01),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.neutral03),
                     backgroundColor: Colors.white,
                   ),
                 )

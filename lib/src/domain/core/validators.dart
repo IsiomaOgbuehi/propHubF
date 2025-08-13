@@ -214,3 +214,16 @@ Either<ValueFailure<String>, String> chatMessageValidator(String value) {
   if (failure.isNotEmpty) return Left(ValueFailure(value, failure));
   return Right(value);
 }
+
+Either<ValueFailure<String>, String> createGroupMessageValidator(String value) {
+  String failure = '';
+  if (value.length < 2) {
+    failure = 'Group name cannot be less than 3 characters';
+  }
+  if (value.isEmpty) {
+    failure = 'Group name cannot be empty';
+  }
+
+  if (failure.isNotEmpty) return Left(ValueFailure(value, failure));
+  return Right(value);
+}

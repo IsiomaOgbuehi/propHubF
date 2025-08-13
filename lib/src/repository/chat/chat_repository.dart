@@ -41,6 +41,8 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Future<Either<PropHubExceptions, ChatGroup>> createChatGroup(CreateGroupRequest request) async {
     final response = await _provider.call(path: ApiConfig.createGroup, method: RequestMethod.post, body: request.toJson());
+    print('LOGGED RESPONSE');
+    print(await response.right?.data.runtimeType);
     return await processData((p0) => ChatGroup.fromJson(p0), response);
   }
 }

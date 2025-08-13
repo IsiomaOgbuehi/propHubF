@@ -8,7 +8,6 @@ import '../network/exceptions/object_parse_exception.dart';
 // typedef EitherExceptionOrStringResponse = Either<PropHubExceptions, StringResponse>;
 // typedef EitherExceptionOrSuccessResponse = Either<PropHubExceptions, SuccessfulAuthorizationResponse>;
 typedef PropHubExceptionOr<T> = Either<PropHubExceptions, T>;
-// typedef FutureAkuExceptionOr<T> = Future<AkuExceptionOr<T>>;
 
 Either<PropHubExceptions, E> transform<E>(dynamic data, E Function(dynamic) transformer) {
   try {

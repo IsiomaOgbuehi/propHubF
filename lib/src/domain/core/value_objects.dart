@@ -152,3 +152,12 @@ class ChatMessage extends ValueObject<String> {
 
   const ChatMessage._(this.value);
 }
+
+class GroupName extends ValueObject<String> {
+  @override
+  final Either<ValueFailure<String>, String> value;
+
+  factory GroupName(String input) => GroupName._(createGroupMessageValidator(input));
+
+  const GroupName._(this.value);
+}

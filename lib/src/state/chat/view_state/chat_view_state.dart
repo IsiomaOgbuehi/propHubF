@@ -7,6 +7,8 @@ import 'package:prophub/src/exceptions/ground_exception.dart';
 import 'package:prophub/src/state/auth/view_models/response/user_response.dart';
 import 'package:prophub/src/state/chat/view_models/response/chat_message_content.dart';
 
+import '../view_models/response/chat_group.dart';
+
 class ChatViewState extends PropHubViewUiState<ChatViewState> {
   @override
   final PropHubExceptions error;
@@ -21,13 +23,22 @@ class ChatViewState extends PropHubViewUiState<ChatViewState> {
 
   final TextEditingController messageController;
 
+  final GroupName groupName;
+
+  final ViewState createGroupViewState;
+
+  final List<ChatGroup> chatGroups;
+
   const ChatViewState(
       {required this.error,
       required this.viewState,
       required this.connectedUsers,
       required this.chatMessage,
       required this.privateChatMessages,
-      required this.messageController});
+      required this.messageController,
+      required this.groupName,
+      required this.createGroupViewState,
+      required this.chatGroups});
 
   factory ChatViewState.initial() => ChatViewState(
       error: const EmptyException(),
@@ -35,25 +46,37 @@ class ChatViewState extends PropHubViewUiState<ChatViewState> {
       connectedUsers: const [],
       chatMessage: ChatMessage(''),
       privateChatMessages: const [],
-      messageController: TextEditingController());
+      messageController: TextEditingController(),
+      groupName: GroupName(''),
+      createGroupViewState: ViewState.idle,
+      chatGroups: const []);
 
   @override
-  ChatViewState copyWith(
-          {ViewState? viewState,
-          PropHubExceptions? error,
-          List<UserResponse>? connectedUsers,
-          ChatMessage? chatMessage,
-          List<ChatMessageContent>? privateChatMessages,
-          TextEditingController? messageController}) =>
+  ChatViewState copyWith({
+    ViewState? viewState,
+    PropHubExceptions? error,
+    List<UserResponse>? connectedUsers,
+    ChatMessage? chatMessage,
+    List<ChatMessageContent>? privateChatMessages,
+    TextEditingController? messageController,
+    GroupName? groupName,
+    ViewState? createGroupViewState,
+    final List<ChatGroup>? chatGroups,
+  }) =>
       ChatViewState(
           error: error ?? this.error,
           viewState: viewState ?? this.viewState,
           connectedUsers: connectedUsers ?? this.connectedUsers,
           chatMessage: chatMessage ?? this.chatMessage,
           privateChatMessages: privateChatMessages ?? this.privateChatMessages,
-          messageController: messageController ?? this.messageController);
+          messageController: messageController ?? this.messageController,
+          groupName: groupName ?? this.groupName,
+          createGroupViewState:
+              createGroupViewState ?? this.createGroupViewState,
+          chatGroups: chatGroups ?? this.chatGroups);
 
   Option<ValueFailure<dynamic>> get failureOption {
-    return chatMessage.failureOrNone.fold(() => const None(), (value) => Some(value));
+    return chatMessage.failureOrNone
+        .fold(() => const None(), (value) => Some(value));
   }
 }
